@@ -10,10 +10,8 @@ from plotly.subplots import make_subplots
 import time
 
 # --- 1. CẤU HÌNH API & MODEL ---
-# Thay Key của bạn vào đây. Nếu có nhiều Key, hãy luân phiên thay đổi khi bị lỗi 429.
 API_KEY = "AIzaSyCi0PkcrE5rvpU1DHlkw91JlaqyhbnELOo" 
 genai.configure(api_key=API_KEY)
-# Sử dụng 1.5-flash vì nó cực kỳ ổn định cho tài khoản miễn phí
 gemini_model = genai.GenerativeModel('gemini-2.5-flash')
 
 # --- 2. TẢI TÀI NGUYÊN (CACHE) ---
@@ -29,7 +27,7 @@ model, scaler = load_assets()
 
 # --- 3. GIAO DIỆN CHÍNH ---
 st.set_page_config(page_title="AAPL AI Dashboard", layout="wide")
-st.title("🍎 Siêu trợ lý Đầu tư AAPL")
+st.title("AI Dự Báo Thị Trường Chứng Khoán")
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
@@ -97,7 +95,7 @@ if prompt := st.chat_input("Hỏi AI về cổ phiếu AAPL..."):
             # --- GỌI AI TƯ VẤN (RETRY LOGIC) ---
             with st.spinner("Đang kết nối chuyên gia AI..."):
                 final_res = ""
-                for i in range(3): # Thử lại 3 lần nếu gặp lỗi 429
+                for i in range(3): 
                     try:
                         res = gemini_model.generate_content(f"AAPL: Open {o_p:.2f}, Close {c_p:.2f}, MA20 {ma20:.2f}, Pred {pred_p:.2f}. Q: {prompt}")
                         final_res = res.text
@@ -110,4 +108,5 @@ if prompt := st.chat_input("Hỏi AI về cổ phiếu AAPL..."):
                 st.session_state.messages.append({"role": "assistant", "content": final_res})
 
         except Exception as e:
+
             st.error(f"Lỗi: {e}")
