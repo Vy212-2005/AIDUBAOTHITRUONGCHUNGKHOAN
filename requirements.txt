@@ -6,3 +6,7 @@ scikit-learn
 tensorflow
 python-dotenv
 Pillow
+google-generativeai
+joblib
+plotly
+ta
