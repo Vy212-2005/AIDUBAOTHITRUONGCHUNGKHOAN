@@ -71,13 +71,30 @@ with st.sidebar:
         st.rerun()
     ticker = st.session_state.ticker
     
-    # Tự động lấy API key từ biến môi trường
+    # Tự động lấy API key từ biến môi trường hoặc Streamlit Secrets
     env_key = os.getenv("GEMINI_API_KEY", "").strip()
-    key = st.text_input("Gemini API Key", value=env_key, type="password")
+    secrets_key = ""
+    try:
+        if "GEMINI_KEYS" in st.secrets:
+            keys_secret = st.secrets["GEMINI_KEYS"]
+            if isinstance(keys_secret, list):
+                secrets_key = ",".join(keys_secret)
+            else:
+                secrets_key = str(keys_secret)
+        elif "GEMINI_API_KEY" in st.secrets:
+            secrets_key = str(st.secrets["GEMINI_API_KEY"]).strip()
+    except Exception:
+        pass
+
+    default_key = secrets_key if secrets_key else env_key
     
-    if not key and not env_key:
-        st.caption("⚠️ Chưa tìm thấy key trong file .env hoặc sidebar")
-    elif env_key:
+    key = st.text_input("Gemini API Key", value=default_key, type="password")
+    
+    if not key:
+        st.caption("⚠️ Chưa tìm thấy key trong secrets, file .env hoặc sidebar")
+    elif secrets_key and key == secrets_key:
+        st.sidebar.caption("✅ Đã tải key từ Streamlit Secrets")
+    elif env_key and key == env_key:
         st.sidebar.caption("✅ Đã tải key từ .env")
     
     if key: 
