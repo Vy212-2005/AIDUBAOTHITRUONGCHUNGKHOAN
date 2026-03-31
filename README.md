@@ -11,7 +11,7 @@
 * Hiển thị kết quả dự đoán trực quan
 * Hỗ trợ người dùng theo dõi và đánh giá thị trường
 
-# Công nghệ sử dụng
+## Công nghệ sử dụng
 * Python (ngôn ngữ chính để xử lý dữ liệu và xây dựng mô hình AI)
 * Anaconda (môi trường quản lý thư viện và chạy dự án)
 * Antigravity (hỗ trợ xử lý logic và cấu trúc chương trình)
